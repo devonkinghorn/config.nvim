@@ -875,7 +875,11 @@ require('lazy').setup({
       require('mini.surround').setup()
 
       require('mini.git').setup()
-
+      require('mini.pairs').setup()
+      require('mini.completion').setup()
+      require('mini.sessions').setup()
+      require('mini.tabline').setup()
+      require('mini.trailspace').setup()
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
