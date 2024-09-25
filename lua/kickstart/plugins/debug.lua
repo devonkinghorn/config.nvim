@@ -11,6 +11,8 @@ return {
   'mfussenegger/nvim-dap',
   -- NOTE: And you can specify dependencies as well
   dependencies = {
+
+    'mfussenegger/nvim-dap-python',
     -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
 
@@ -49,6 +51,7 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+    require('dap-python').setup 'python'
 
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
