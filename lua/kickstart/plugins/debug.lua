@@ -45,34 +45,52 @@ return {
       },
       -- Toggle to see last session result. Without this, you can't see session output in case of unhandled exception.
       { '<F7>', dapui.toggle, desc = 'Debug: See last session result.' },
+      {
+        '<leader>dt',
+        function()
+          require('dap-python').test_method { config = { justMyCode = false } }
+        end,
+        desc = 'Debug: test',
+      },
       unpack(keys),
     }
   end,
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
-    require('dap-python').setup 'python'
+    require('dap-python').setup '/home/devon/.cache/pypoetry/virtualenvs/mdu-visitor-service-J28zxtgW-py3.11/bin/python'
+    require('dap-python').test_runner = 'pytest'
+    -- require('dap-python').resolve_python = function()
+    --   return '/home/devon/.cache/pypoetry/virtualenvs/mdu-visitor-service-J28zxtgW-py3.11/bin/python'
+    --   -- local handle = io.popen('poetry run which python')
+    --   -- local result = handle:read("*a")
+    --   -- handle:close()
+    --   -- return result:gsub("%s+", "")  -- Remove any trailing whitespace
+    -- end
 
-    require('mason-nvim-dap').setup {
-      -- Makes a best effort to setup the various debuggers with
-      -- reasonable debug configurations
-      automatic_installation = true,
-
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
-      handlers = {},
-
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
-      ensure_installed = {
-        -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
-      },
-    }
+    -- require('mason-nvim-dap').setup {
+    --   -- Makes a best effort to setup the various debuggers with
+    --   -- reasonable debug configurations
+    --   automatic_installation = true,
+    --
+    --   -- You can provide additional configuration to the handlers,
+    --   -- see mason-nvim-dap README for more information
+    --   handlers = {},
+    --
+    --   -- You'll need to check that you have the required things installed
+    --   -- online, please don't ask me how to install them :)
+    --   ensure_installed = {
+    --     -- Update this to ensure that you have the debuggers for the langs you want
+    --     'delve',
+    --   },
+    -- }
 
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
+      config = {
+        justMyCode = false,
+      },
       -- Set icons to characters that are more likely to work in every terminal.
       --    Feel free to remove or use ones that you like more! :)
       --    Don't feel like these are good choices.
