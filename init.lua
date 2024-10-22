@@ -42,7 +42,7 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 vim.keymap.set('n', '<leader>wh', ':split<CR>', { desc = '[W]indow split' })
 vim.keymap.set('n', '<leader>wv', ':vsplit<CR>', { desc = '[W]indow vertical split' })
-vim.keymap.set('n', '<leader>wt', ':tab split<CR>', { desc = '[W]indow vertical split' })
+vim.keymap.set('n', '<leader>wt', ':tab split<CR>', { desc = '[T]ab split' })
 
 -- suggested for avante
 vim.opt.laststatus = 3
@@ -399,9 +399,15 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        -- basedpyright = {},
-        pyright = {},
-        -- ruff = {},
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              typeCheckingMode = "basic"
+            }
+          }
+        },
+        -- pyright = {},
+        ruff = {},
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -500,7 +506,7 @@ require('lazy').setup({
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
-        python = { 'black' },
+        python = { 'ruff_fix', 'ruff_format' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -620,7 +626,6 @@ require('lazy').setup({
           { name = 'luasnip' },
           { name = 'path' },
           { name = "vim-dadbod-completion" },
-          { name = "buffer" },
         },
       }
     end,
@@ -665,10 +670,13 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      require('mini.bufremove').setup()
+      vim.keymap.set('n', '<leader>q', ':lua MiniBufremove.delete()<CR>', { desc = 'Delete Buffer' })
       require('mini.git').setup()
       require('mini.pairs').setup()
       require('mini.completion').setup()
       require('mini.icons').setup()
+      require('mini.indentscope').setup()
       require('mini.sessions').setup()
       require('mini.trailspace').setup()
       -- Simple and easy statusline.
