@@ -9,9 +9,9 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+-- vim.schedule(function()
+--   vim.opt.clipboard = 'unnamedplus'
+-- end)
 vim.opt.breakindent = true
 vim.opt.undofile = true
 vim.opt.ignorecase = true
@@ -103,8 +103,8 @@ require('lazy').setup({
     'lewis6991/gitsigns.nvim',
     opts = {
       signs = {
-        add = { text = '✨' },
-        change = { text = '🔂' },
+        add = { text = '+' },
+        change = { text = '/' },
         delete = { text = '⛔️' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
@@ -270,6 +270,7 @@ require('lazy').setup({
       require('nvim-tree').setup()
     end,
   },
+  -- { 'python-rope/ropevim' },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -402,9 +403,9 @@ require('lazy').setup({
         basedpyright = {
           settings = {
             basedpyright = {
-              typeCheckingMode = "basic"
-            }
-          }
+              typeCheckingMode = 'standard',
+            },
+          },
         },
         -- pyright = {},
         ruff = {},
@@ -625,12 +626,54 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
-          { name = "vim-dadbod-completion" },
+          { name = 'vim-dadbod-completion' },
         },
       }
     end,
   },
+  {
+    'bluz71/vim-moonfly-colors',
+    name = 'moonfly',
+    -- lazy = false,
+    -- priority = 1000,
+    -- init = function()
+    --   vim.cmd.colorscheme 'moonfly'
+    -- end,
+  },
+  {
+    'projekt0n/github-nvim-theme',
+    name = 'github-theme',
+    lazy = false, -- make sure we load this during startup if it is your main colorscheme
+    priority = 1000, -- make sure to load this before all the other start plugins
+    config = function()
+      require('github-theme').setup {
+        -- ...
+      }
 
+      -- vim.cmd 'colorscheme github_dark_default'
+    end,
+  },
+  {
+    'marko-cerovac/material.nvim',
+  },
+  { 'EdenEast/nightfox.nvim' },
+  { 'bluz71/vim-nightfly-colors', name = 'nightfly' },
+  {
+    'morhetz/gruvbox',
+  },
+  {
+    'rebelot/kanagawa.nvim',
+  },
+  {
+    'navarasu/onedark.nvim',
+    init = function()
+      require('onedark').setup {
+        style = 'deep',
+      }
+      require('onedark').load()
+    end,
+  },
+  { 'catppuccin/nvim', name = 'catppuccin' },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
     -- change the command in the config to whatever the name of that colorscheme is.
@@ -670,6 +713,15 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
+      -- require('mini.animate').setup {
+      --   cursor = {
+      --     timing = require('mini.animate').gen_timing.linear { duration = 150, unit = 'total' },
+      --   },
+      --   scroll = {
+      --     enable = false,
+      --     timing = require('mini.animate').gen_timing.linear { duration = 150, unit = 'total' },
+      --   },
+      -- }
       require('mini.bufremove').setup()
       vim.keymap.set('n', '<leader>q', ':lua MiniBufremove.delete()<CR>', { desc = 'Delete Buffer' })
       require('mini.git').setup()
@@ -682,8 +734,7 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
-      -- set use_icons to true if you have a Nerd Font
+      local statusline = require 'mini.statusline' -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
       -- You can configure sections in the statusline by overriding their

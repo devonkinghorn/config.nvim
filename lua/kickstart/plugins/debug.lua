@@ -36,6 +36,7 @@ return {
       { '<F2>', dap.step_over, desc = 'Debug: Step Over' },
       { '<F3>', dap.step_out, desc = 'Debug: Step Out' },
       { '<leader>b', dap.toggle_breakpoint, desc = 'Debug: Toggle Breakpoint' },
+      { '<leader>dr', function() dapui.float_element('repl') end, desc = 'Debug: Toggle Breakpoint' },
       {
         '<leader>B',
         function()
@@ -58,7 +59,16 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
-    require('dap-python').setup '/home/devon/.cache/pypoetry/virtualenvs/mdu-visitor-service-J28zxtgW-py3.11/bin/python'
+    -- require('dap-python').setup '/home/devon/.cache/pypoetry/virtualenvs/pdk-cloud-CXTkVNpj-py3.11/bin/python'
+
+    local function get_python_path()
+      local handle = io.popen('poetry run which python')
+      local result = handle:read('*a')
+      handle:close()
+      return result -- Remove any trailing whitespace
+    end
+    -- require('dap-python').setup('/home/devon/.cache/pypoetry/virtualenvs/mdu-bmx-service-BgoaynEi-py3.11/bin/python')
+    require('dap-python').setup(get_python_path())
     require('dap-python').test_runner = 'pytest'
     -- require('dap-python').resolve_python = function()
     --   return '/home/devon/.cache/pypoetry/virtualenvs/mdu-visitor-service-J28zxtgW-py3.11/bin/python'

@@ -1,13 +1,23 @@
 return {
   {
     'yetone/avante.nvim',
-    config = {
-      provider = 'copilot',
-      auto_suggestions_provider = 'copilot',
-      behavior = {
-        auto_suggestions = true,
-      },
-    },
+    config = function()
+      require('avante_lib').load()
+      require('avante').setup({
+        provider = 'copilot',
+        auto_suggestions_provider = 'copilot',
+        behavior = {
+          auto_suggestions = true,
+        },
+        mappings = {
+          suggestion = {
+            accept = '<Tab>',
+            next = '<-]>',
+            prev = '<-]>',
+          },
+        },
+      })
+    end,
     event = 'VeryLazy',
     lazy = false,
     version = false, -- set this if you want to always pull the latest change

@@ -6,8 +6,9 @@ return {
     -- name = "venv",
     -- auto_refresh = false
     poetry_path = '/home/devon/.cache/pypoetry/virtualenvs',
-    search_workspace = false
+    search_workspace = false,
   },
+  branch = 'regexp',
   event = 'VeryLazy', -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
   keys = {
     -- Keymap to open VenvSelector to pick a venv.
