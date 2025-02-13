@@ -67,7 +67,7 @@ return {
       handle:close()
       return result -- Remove any trailing whitespace
     end
-    -- require('dap-python').setup('/home/devon/.cache/pypoetry/virtualenvs/mdu-bmx-service-BgoaynEi-py3.11/bin/python')
+    -- require('dap-python').setup('/var/home/devon/.cache/pypoetry/virtualenvs/mdu-bmx-service-wVp_UBPn-py3.10/bin/python')
     require('dap-python').setup(get_python_path())
     require('dap-python').test_runner = 'pytest'
     -- require('dap-python').resolve_python = function()

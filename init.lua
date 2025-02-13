@@ -1,6 +1,6 @@
 vim.g.mapleader = ','
 vim.g.maplocalleader = ','
-
+vim.opt.tabstop = 4
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -9,6 +9,7 @@ vim.g.have_nerd_font = true
 vim.opt.number = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
+vim.opt.cmdheight = 0
 -- vim.schedule(function()
 --   vim.opt.clipboard = 'unnamedplus'
 -- end)
@@ -105,7 +106,7 @@ require('lazy').setup({
       signs = {
         add = { text = '+' },
         change = { text = '/' },
-        delete = { text = '⛔️' },
+        delete = { text = 'x' },
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
@@ -177,7 +178,12 @@ require('lazy').setup({
     'nvim-telescope/telescope.nvim',
     event = 'VimEnter',
     branch = '0.1.x',
+    keys = {
+      { 'Q', '<cmd>Telescope cmdline<cr>', desc = 'Cmdline' },
+      { '<leader>.', '<cmd>Telescope cmdline<cr>', desc = 'Cmdline' },
+    },
     dependencies = {
+      'jonarrien/telescope-cmdline.nvim',
       'nvim-lua/plenary.nvim',
       { -- If encountering errors, see telescope-fzf-native README for installation instructions
         'nvim-telescope/telescope-fzf-native.nvim',
@@ -199,6 +205,11 @@ require('lazy').setup({
     },
     config = function()
       require('telescope').setup {
+        pickers = {
+          find_files = {
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -209,6 +220,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'cmdline')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -221,7 +233,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>sa', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-      vim.keymap.set('n', '<leader>a', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      vim.keymap.set('n', '<leader>sb', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -247,6 +259,12 @@ require('lazy').setup({
       end, { desc = '[S]earch [N]eovim files' })
     end,
   },
+  {
+    'andrew-george/telescope-themes',
+    config = function()
+      require('telescope').load_extension 'themes'
+    end,
+  },
 
   -- LSP Plugins
   {
@@ -264,7 +282,7 @@ require('lazy').setup({
   {
     'nvim-tree/nvim-tree.lua',
     keys = {
-      { '<leader>e', '<cmd>NvimTreeFindFile<cr>', desc = 'NeoTree' },
+      -- { '<leader>e', '<cmd>NvimTreeFindFile<cr>', desc = 'NeoTree' },
     },
     config = function()
       require('nvim-tree').setup()
@@ -403,7 +421,7 @@ require('lazy').setup({
         basedpyright = {
           settings = {
             basedpyright = {
-              typeCheckingMode = 'standard',
+              typeCheckingMode = 'basic',
             },
           },
         },
@@ -416,7 +434,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`tsserver`) will work just fine
-        -- tsserver = {},
+        -- typescript_ls = {},
         --
 
         lua_ls = {
@@ -664,15 +682,15 @@ require('lazy').setup({
   {
     'rebelot/kanagawa.nvim',
   },
-  {
-    'navarasu/onedark.nvim',
-    init = function()
-      require('onedark').setup {
-        style = 'deep',
-      }
-      require('onedark').load()
-    end,
-  },
+  -- {
+  --   'navarasu/onedark.nvim',
+  --   init = function()
+  --     require('onedark').setup {
+  --       style = 'deep',
+  --     }
+  --     require('onedark').load()
+  --   end,
+  -- },
   { 'catppuccin/nvim', name = 'catppuccin' },
   { -- You can easily change to a different colorscheme.
     -- Change the name of the colorscheme plugin below, and then
@@ -694,6 +712,55 @@ require('lazy').setup({
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  {
+    'github/copilot.vim',
+    config = function()
+      require('copilot').setup {
+        panel = {
+          enabled = true,
+          auto_refresh = false,
+          keymap = {
+            jump_prev = '[[',
+            jump_next = ']]',
+            accept = '<CR>',
+            refresh = 'gr',
+            open = '<M-CR>',
+          },
+          layout = {
+            position = 'bottom', -- | top | left | right | horizontal | vertical
+            ratio = 0.4,
+          },
+        },
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+          hide_during_completion = true,
+          debounce = 75,
+          keymap = {
+            accept = '<Tab>',
+            accept_word = false,
+            accept_line = false,
+            next = '<M-]>',
+            prev = '<M-[>',
+            dismiss = '<C-]>',
+          },
+        },
+        filetypes = {
+          yaml = false,
+          markdown = false,
+          help = false,
+          gitcommit = false,
+          gitrebase = false,
+          hgcommit = false,
+          svn = false,
+          cvs = false,
+          ['.'] = false,
+        },
+        copilot_node_command = 'node', -- Node.js version must be > 18.x
+        server_opts_overrides = {},
+      }
+    end,
+  },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -713,21 +780,22 @@ require('lazy').setup({
       -- - sr)'  - [S]urround [R]eplace [)] [']
       require('mini.surround').setup()
 
-      -- require('mini.animate').setup {
-      --   cursor = {
-      --     timing = require('mini.animate').gen_timing.linear { duration = 150, unit = 'total' },
-      --   },
-      --   scroll = {
-      --     enable = false,
-      --     timing = require('mini.animate').gen_timing.linear { duration = 150, unit = 'total' },
-      --   },
-      -- }
+      require('mini.animate').setup {
+        cursor = {
+          timing = require('mini.animate').gen_timing.linear { duration = 200, unit = 'total' },
+        },
+        scroll = {
+          enable = false,
+          timing = require('mini.animate').gen_timing.linear { duration = 150, unit = 'total' },
+        },
+        resize = { enable = false },
+      }
       require('mini.bufremove').setup()
       vim.keymap.set('n', '<leader>q', ':lua MiniBufremove.delete()<CR>', { desc = 'Delete Buffer' })
       require('mini.git').setup()
       require('mini.pairs').setup()
       require('mini.completion').setup()
-      require('mini.icons').setup()
+      -- require('mini.icons').setup()
       require('mini.indentscope').setup()
       require('mini.sessions').setup()
       require('mini.trailspace').setup()
@@ -748,6 +816,21 @@ require('lazy').setup({
       -- ... and there is more!
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
+  },
+  {
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      -- add any options here
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      'rcarriga/nvim-notify',
+    },
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
@@ -815,52 +898,6 @@ require('lazy').setup({
       start = '🚀',
       task = '📌',
       lazy = '💤 ',
-    },
-  },
-  {
-    'yetone/avante.nvim',
-    event = 'VeryLazy',
-    lazy = false,
-    version = false, -- set this if you want to always pull the latest change
-    opts = {
-      -- add any opts here
-    },
-    -- if you want to build from source then do `make BUILD_FROM_SOURCE=true`
-    build = 'make',
-    -- build = "powershell -ExecutionPolicy Bypass -File Build.ps1 -BuildFromSource false" -- for windows
-    dependencies = {
-      'nvim-treesitter/nvim-treesitter',
-      'stevearc/dressing.nvim',
-      'nvim-lua/plenary.nvim',
-      'MunifTanjim/nui.nvim',
-      --- The below dependencies are optional,
-      'nvim-tree/nvim-web-devicons', -- or echasnovski/mini.icons
-      'zbirenbaum/copilot.lua', -- for providers='copilot'
-      {
-        -- support for image pasting
-        'HakonHarnes/img-clip.nvim',
-        event = 'VeryLazy',
-        opts = {
-          -- recommended settings
-          default = {
-            embed_image_as_base64 = false,
-            prompt_for_file_name = false,
-            drag_and_drop = {
-              insert_mode = true,
-            },
-            -- required for Windows users
-            use_absolute_path = true,
-          },
-        },
-      },
-      {
-        -- Make sure to set this up properly if you have lazy=true
-        'MeanderingProgrammer/render-markdown.nvim',
-        opts = {
-          file_types = { 'markdown', 'Avante' },
-        },
-        ft = { 'markdown', 'Avante' },
-      },
     },
   },
 })
