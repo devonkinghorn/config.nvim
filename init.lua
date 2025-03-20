@@ -10,9 +10,8 @@ vim.opt.number = true
 vim.opt.mouse = 'a'
 vim.opt.showmode = false
 vim.opt.cmdheight = 0
--- vim.schedule(function()
---   vim.opt.clipboard = 'unnamedplus'
--- end)
+vim.schedule(function() vim.opt.clipboard = 'unnamedplus' end)
+-- vim.opt.clipboard = 'unnamedplus'
 vim.opt.breakindent = true
 vim.opt.undofile = true
 vim.opt.ignorecase = true
@@ -282,7 +281,7 @@ require('lazy').setup({
   {
     'nvim-tree/nvim-tree.lua',
     keys = {
-      -- { '<leader>e', '<cmd>NvimTreeFindFile<cr>', desc = 'NeoTree' },
+      { '<leader>e', '<cmd>NvimTreeFindFile<cr>', desc = 'NeoTree' },
     },
     config = function()
       require('nvim-tree').setup()
@@ -427,7 +426,7 @@ require('lazy').setup({
         },
         -- pyright = {},
         ruff = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -526,6 +525,7 @@ require('lazy').setup({
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
         python = { 'ruff_fix', 'ruff_format' },
+        go = { 'gofmt' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
